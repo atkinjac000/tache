@@ -5,6 +5,13 @@ let save filename t =
   Out_channel.output_string oc ((Sexp.to_string (Task.sexp_of_t t)) ^ "\n");
   Out_channel.close oc
 
+let save_and_overwrite filename tasks =
+  let oc = Out_channel.create filename in
+  List.iter tasks ~f:(fun t ->
+    Out_channel.output_string oc ((Sexp.to_string (Task.sexp_of_t t)) ^ "\n");
+    );
+  Out_channel.close oc
+  
 let load filename =
   let lines = In_channel.read_lines filename in
   List.map lines ~f:Sexp.of_string
@@ -17,6 +24,6 @@ let get_highest_priority tasks =
     | hd :: _ -> hd
 
 let show_tasks tasks =
-  List.iter tasks ~f:(fun t ->
-    Task.string_of_t t |> (printf "%s\n"))
+  List.iteri tasks ~f:(fun i t ->
+    Task.string_of_t t |> (printf "%d: %s\n") i)
 
