@@ -22,7 +22,11 @@ let complete_task file n =
   Array.set tasks n (Task.complete (Array.get tasks n));
   let new_tasks = Array.to_list tasks in
   Tache.save_and_overwrite file new_tasks
-  
+
+let clean_tasks file =
+  let tasks = Tache.load file in
+  let new_tasks = List.filter tasks ~f:(fun x -> not (Task.is_complete x)) in
+  Tache.save_and_overwrite file new_tasks
 
 let list_tasks_cmd = 
   let doc = "List your tasks, ordered by priority." in
@@ -52,10 +56,17 @@ let complete_task_cmd =
   let num = Arg.(value & opt int 0 & info ["n"]) in
   Cmd.v info Term.(const complete_task $ file $ num)
 
+let clean_task_cmd =
+  let doc = "Clean all completed tasks from the list." in
+  let info = Cmd.info "clean" ~doc in
+  let file = Arg.(value & opt string task_file & info ["f"]) in
+  Cmd.v info Term.(const clean_tasks $ file)
+  
+
 let tache_cmd =
   let doc = "Simple CLI task manager" in
   let info = Cmd.info "tache" ~version:"0.1" ~doc in
-  Cmd.group info [new_task_cmd; highest_priority_cmd; list_tasks_cmd; complete_task_cmd;]
+  Cmd.group info [new_task_cmd; highest_priority_cmd; list_tasks_cmd; complete_task_cmd; clean_task_cmd;]
 
 let () =
   exit (Cmd.eval tache_cmd)

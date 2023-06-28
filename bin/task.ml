@@ -11,6 +11,8 @@ let create name priority complete = { name; priority; complete; }
 
 let update_priority new_priority t = { t with priority=new_priority }
 
+let is_complete t = if t.complete then true else false
+
 let complete t = { t with complete=true; priority= -1 }
 
 let compare t1 t2 =
