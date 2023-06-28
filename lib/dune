@@ -1,0 +1,4 @@
+(library
+ (name tache)
+ (libraries core cmdliner)
+ (preprocess (pps ppx_sexp_conv)))
