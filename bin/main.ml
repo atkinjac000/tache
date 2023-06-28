@@ -1,7 +1,7 @@
 open Core
 open Cmdliner
 
-let task_file = "tache_test"
+let task_file = Sys.getenv_exn "TACHE_FILE"
 
 let save_new_task name priority complete =
   let new_task = Task.create name priority complete in
