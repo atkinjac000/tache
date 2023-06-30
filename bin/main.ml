@@ -4,29 +4,29 @@ open Cmdliner
 let task_file = Sys.getenv_exn "TACHE_FILE"
 
 let save_new_task name priority complete =
-  let new_task = Task.create name priority complete in
-  Tache.save task_file new_task
+  let new_task = Tache.Task.create name priority complete in
+  Tache.Task.save task_file new_task
 
 let get_highest_priority_task file =
-  Tache.load file
-  |> Tache.get_highest_priority
-  |> Task.string_of_t
+  Tache.Task.load file
+  |> Tache.Task.get_highest_priority
+  |> Tache.Task.string_of_t
   |> (printf "%s\n")
 
 let list_tasks file =
-  Tache.load file
-  |> Tache.show_tasks
+  Tache.Task.load file
+  |> Tache.Task.show_tasks
 
 let complete_task file n =
-  let tasks = Tache.load file |> Array.of_list in
-  Array.set tasks n (Task.complete (Array.get tasks n));
+  let tasks = Tache.Task.load file |> Array.of_list in
+  Array.set tasks n (Tache.Task.complete (Array.get tasks n));
   let new_tasks = Array.to_list tasks in
-  Tache.save_and_overwrite file new_tasks
+  Tache.Task.save_and_overwrite file new_tasks
 
 let clean_tasks file =
-  let tasks = Tache.load file in
-  let new_tasks = List.filter tasks ~f:(fun x -> not (Task.is_complete x)) in
-  Tache.save_and_overwrite file new_tasks
+  let tasks = Tache.Task.load file in
+  let new_tasks = List.filter tasks ~f:(fun x -> not (Tache.Task.is_complete x)) in
+  Tache.Task.save_and_overwrite file new_tasks
 
 let list_tasks_cmd = 
   let doc = "List your tasks, ordered by priority." in
