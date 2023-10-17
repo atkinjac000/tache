@@ -17,8 +17,8 @@ let compare t1 t2 =
 ;;
 
 let string_of_t t =
-  let completion = if t.complete then "Completed" else "Incomplete" in
-  t.name ^ " : " ^ " " ^ completion
+  let completion = if t.complete then "\x1b[32m" else "\x1b[31m" in
+  completion ^ t.name ^ "\x1b[0m"
 ;;
 
 let save filename t =
@@ -46,5 +46,5 @@ let get_highest_priority tasks =
 ;;
 
 let show_tasks tasks =
-  List.iteri tasks ~f:(fun i t -> string_of_t t |> (printf "%d: %s\n") i)
+  List.iteri tasks ~f:(fun i t -> string_of_t t |> (printf "%d : %s\n") i)
 ;;

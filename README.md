@@ -2,6 +2,10 @@
 
 Tache is simply a task queue that can be managed through the CLI.
 
+# TODO
+
+- Want to be able to see priority on 'tache list'.
+
 ## Installation
 
 1. run `dune build`

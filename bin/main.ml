@@ -25,7 +25,7 @@ let complete_task file n =
 ;;
 
 let clean_tasks file =
-  let tasks = Tache.Task.load file in
+    let tasks = Tache.Task.load file in
   let new_tasks = List.filter tasks ~f:(fun x -> not (Tache.Task.is_complete x)) in
   Tache.Task.save_and_overwrite file new_tasks
 ;;
