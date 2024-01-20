@@ -9,8 +9,8 @@ val compare : t -> t -> int
 val string_of_t : t -> string
 val is_complete : t -> bool
 
-val sexp_of_t : t -> Sexp.t
-val t_of_sexp : Sexp.t -> t
+val yojson_of_t : t -> Yojson.Safe.t
+val t_of_yojson : Yojson.Safe.t -> t
 
 val save : string -> t -> Unit.t
 val load : string -> t list

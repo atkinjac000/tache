@@ -1,11 +1,12 @@
 open Core
+open Ppx_yojson_conv_lib.Yojson_conv.Primitives
 
 type t =
   { name : string
   ; priority : int
   ; complete : bool
   }
-[@@deriving sexp]
+[@@deriving yojson]
 
 let create name priority complete = { name; priority; complete }
 let update_priority new_priority t = { t with priority = new_priority }
@@ -23,20 +24,20 @@ let string_of_t t =
 
 let save filename t =
   let oc = Out_channel.create ~append:true filename in
-  Out_channel.output_string oc (Sexp.to_string (sexp_of_t t) ^ "\n");
+  Out_channel.output_string oc (Yojson.Safe.to_string (yojson_of_t t) ^ "\n");
   Out_channel.close oc
 ;;
 
 let save_and_overwrite filename tasks =
   let oc = Out_channel.create filename in
   List.iter tasks ~f:(fun t ->
-    Out_channel.output_string oc (Sexp.to_string (sexp_of_t t) ^ "\n"));
+    Out_channel.output_string oc (Yojson.Safe.to_string (yojson_of_t t) ^ "\n"));
   Out_channel.close oc
 ;;
 
 let load filename =
   let lines = In_channel.read_lines filename in
-  List.map lines ~f:Sexp.of_string |> List.map ~f:t_of_sexp |> List.sort ~compare
+  List.map lines ~f:Yojson.Safe.from_string |> List.map ~f:t_of_yojson |> List.sort ~compare
 ;;
 
 let get_highest_priority tasks =
